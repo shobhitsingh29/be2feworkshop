@@ -2,6 +2,7 @@ package de.phgieschen.fe2be.snapshot.controller
 
 import de.phgieschen.fe2be.snapshot.dto.RequestDTO
 import de.phgieschen.fe2be.snapshot.dto.ResponseDTO
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
@@ -12,7 +13,9 @@ import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-class SampleController {
+class SampleController(
+    @Value("\${sample.config.value}") val configValue: String,
+) {
 
     @GetMapping("/sample")
     fun getSample(): ResponseEntity<ResponseDTO> {
@@ -42,5 +45,10 @@ class SampleController {
         @RequestBody request: RequestDTO
     ): ResponseEntity<ResponseDTO> {
         return ResponseEntity.ok(ResponseDTO(status = 201, message = request.message))
+    }
+
+    @GetMapping("sample/config")
+    fun getSampleConfig(): ResponseEntity<ResponseDTO> {
+        return ResponseEntity.ok(ResponseDTO(status = 201, message = configValue))
     }
 }
