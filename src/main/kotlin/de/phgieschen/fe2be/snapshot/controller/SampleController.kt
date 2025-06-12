@@ -6,11 +6,14 @@ import org.springframework.beans.factory.annotation.Value
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
+import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestMethod
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
+import kotlin.random.Random
+import kotlin.random.Random.Default
 
 @RestController
 class SampleController(
@@ -50,5 +53,14 @@ class SampleController(
     @GetMapping("sample/config")
     fun getSampleConfig(): ResponseEntity<ResponseDTO> {
         return ResponseEntity.ok(ResponseDTO(status = 201, message = configValue))
+    }
+
+    @PostMapping("/sample/exception")
+    fun throwSomething(): ResponseEntity<ResponseDTO> {
+        val shouldThrow = Random.nextInt(from = 0, until = 9) >= 5
+        if(shouldThrow) {
+            throw IllegalArgumentException("something is wrong here")
+        }
+        return ResponseEntity.ok(ResponseDTO(status = 201, message = "Lucky you"))
     }
 }
