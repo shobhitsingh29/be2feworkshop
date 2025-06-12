@@ -1,3 +1,6 @@
 spring:
   application:
     name: pqs-management
+
+swapi:
+  url: https://swapi.info/api/
