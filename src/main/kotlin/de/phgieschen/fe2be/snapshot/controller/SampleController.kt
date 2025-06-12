@@ -57,10 +57,11 @@ class SampleController(
 
     @PostMapping("/sample/exception")
     fun throwSomething(): ResponseEntity<ResponseDTO> {
-        val shouldThrow = Random.nextInt(from = 0, until = 9) >= 5
-        if(shouldThrow) {
-            throw IllegalArgumentException("something is wrong here")
+        val random = Random.nextInt(from = 0, until = 9)
+        when(random) {
+            in 0..3 -> throw IllegalArgumentException("something is wrong here")
+            in 4..8 -> throw IllegalStateException("something is super wrong here")
+            else -> return ResponseEntity.ok(ResponseDTO(status = 201, message = "Lucky you"))
         }
-        return ResponseEntity.ok(ResponseDTO(status = 201, message = "Lucky you"))
     }
 }
