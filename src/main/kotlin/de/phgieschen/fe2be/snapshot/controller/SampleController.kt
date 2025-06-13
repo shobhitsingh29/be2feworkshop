@@ -2,11 +2,15 @@ package de.phgieschen.fe2be.snapshot.controller
 
 import de.phgieschen.fe2be.snapshot.dto.RequestDTO
 import de.phgieschen.fe2be.snapshot.dto.ResponseDTO
+import de.phgieschen.fe2be.snapshot.dto.UserInfoDTO
+import de.phgieschen.fe2be.snapshot.dto.UserType.SUPPLIER
 import org.springframework.beans.factory.annotation.Value
+import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.RequestAttribute
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestMethod
@@ -63,5 +67,15 @@ class SampleController(
             in 4..8 -> throw IllegalStateException("something is super wrong here")
             else -> return ResponseEntity.ok(ResponseDTO(status = 201, message = "Lucky you"))
         }
+    }
+
+    @GetMapping("/sample/property")
+    fun getSampleWithProperty(
+        @RequestAttribute("userInfo") userInfoDTO: UserInfoDTO
+    ): ResponseEntity<ResponseDTO> {
+        if (userInfoDTO.userType == SUPPLIER) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED.value()).build()
+        }
+        return ResponseEntity.ok(ResponseDTO(status = 201, message = "$userInfoDTO"))
     }
 }
